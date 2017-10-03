@@ -1,0 +1,19 @@
+db:
+  aws_identifier: cyberbullying
+  db_name: cyberbullying
+#  if there's an octothorpe on a line, acts like a comment
+#  user_name: lmesa
+#  password: super-secret-password
+  user_name: group_admin
+  password: another-super-secret-password
+  url: find-in-the-rds-gui-on-aws.rds.amazonaws.com
+  port: 5432
+  aws_availability_zone: us-east-find-in-rds-gui-on-aws
+
+aws:
+  user_name: your-aws-name
+  password: your-aws-password
+
+s3:
+  bucket_name: find-in-s3-gui-on-aws
+  bucket_key: also-find-in-s3-gui-on-aws
