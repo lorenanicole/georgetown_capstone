@@ -1,3 +1,5 @@
 config.yml
 .idea/
 venv/
+__pycache__/
+*.pyc

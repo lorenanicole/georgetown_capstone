@@ -21,8 +21,8 @@ CONFIG = yaml.load(open(PARENT_DIR + '/config.yml', 'r'))
 
 session = boto3.session.Session(profile_name=CONFIG.get('aws').get('user_name'))
 s3 = session.client('s3')
-bucket_key = CONFIG.get('s3').get('bucket_key')
-bucket_name = CONFIG.get('s3').get('bucket_name')
+bucket_key = CONFIG.get('s3').get('test_bucket_key')
+bucket_name = CONFIG.get('s3').get('test_bucket_name')
 
 
 # Commented out as this has already been written to S3
