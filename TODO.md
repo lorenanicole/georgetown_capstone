@@ -1,0 +1,5 @@
+- Port data into database
+- Update daily cron to load into database
+- Update analysis in Jupyter notebook
+- Make basic analysis in Jupyter notebook with Reddit aggregate stats
+- Basic viz

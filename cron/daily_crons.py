@@ -13,7 +13,7 @@ def main():
                                                                        PARENT_DIR + '/venv/local/bin',
                                                                        PARENT_DIR,
                                                                        'scrapers/reddit/reddit.py'))
-    job.setall('28 23 * * *')
+    job.setall('00 16 * * *')
     job.enable()
 
     users_cron.write()
