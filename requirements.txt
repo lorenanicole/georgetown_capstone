@@ -42,3 +42,4 @@ Twisted==17.9.0
 urllib3==1.22
 w3lib==1.18.0
 zope.interface==4.4.3
+python-crontab==2.2.0

@@ -9,8 +9,11 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 def main():
     users_cron = CronTab(user='root')
 
-    job = users_cron.new(command='cd {0}/{1}; python34 '.format(PARENT_DIR, 'scrapers/reddit/reddit'))
-    job.setall('00 22 * * *')
+    job = users_cron.new(command='cd {0}; {1}/python34 {2}/{3}'.format(PARENT_DIR,
+                                                                       PARENT_DIR + '/venv/bin',
+                                                                       PARENT_DIR,
+                                                                       'scrapers/reddit/reddit.py'))
+    job.setall('25 22 * * *')
     job.enable()
 
     users_cron.write()
