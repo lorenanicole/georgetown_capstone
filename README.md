@@ -29,6 +29,7 @@ To get started you'll need to:
 - Setup a Python 3.4 `virtualenv` (by convention named `venv` as that's what's ignored in `.gitignore`) using the `requirements.txt` file, else use `conda`
 - Note: If using AWS EC2 Amazon image, you may need to confirm the proper pip is used to install depedendencies. You don't want system pip but the virtualenv pip `/venv/local/bin/pip3.4`.
 - Create a `config.yml` using your credentials, use `example-config.yml` as a template
+- Setup AWS credentials via `aws configure`
 
 ### Questions?
 

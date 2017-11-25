@@ -130,7 +130,7 @@ def main():
 
     today_date_string = datetime.today().strftime('%Y-%m-%d')
 
-    logger.info('Starting {} reddit scrape for'.format(today_date_string))
+    logger.info('Starting {} reddit scrape'.format(today_date_string))
 
     # Definition: 200 rising submissions with all comments and subcomments
     for subreddit_name in SUBREDDITS:
@@ -142,9 +142,8 @@ def main():
         subreddit = reddit.subreddit(subreddit_name)
         submission_counter = 1
 
-        for submission in subreddit.rising(limit=100):
+        for submission in subreddit.rising(limit=200):
             logger.info('Processing subreddit {0} submission {1}'.format(subreddit_name, submission_counter))
-            current = 'Processing subreddit {0} submission {1}'.format(subreddit_name, submission_counter)
 
             # print(submission.permalink)
             submission_counter += 1
@@ -225,6 +224,8 @@ def main():
             bucket_key=CONFIG.get('s3').get('reddit_bucket_key'),
             subreddit_data={subreddit_name: all_subreddit_data[subreddit_name]}
         )
+
+    logger.info('Finishing {} reddit scrape'.format(today_date_string))
 
     return 1
 
