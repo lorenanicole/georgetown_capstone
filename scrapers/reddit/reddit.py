@@ -4,7 +4,8 @@ The /learnpython subreddit recommends PRAW: https://www.reddit.com/r/learnpython
 """
 from datetime import datetime
 import json
-
+import logging
+from logging.handlers import RotatingFileHandler
 import boto3
 import io
 import praw
@@ -16,6 +17,9 @@ from collections import namedtuple
 from praw.models import Submission, Redditor, Subreddit, MoreComments
 from praw.models.comment_forest import CommentForest
 
+__author__ = 'lorenamesa'
+
+
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 CONFIG = yaml.load(open(PARENT_DIR + '/config.yml', 'r'))
@@ -24,6 +28,13 @@ SUBREDDITS = ['politics', 'Leagueoflegends', 'AskReddit', 'soccer']
 BOT_WARNINGS = {
     'politics': 'I am a bot, and this action was performed automatically. Please [contact the moderators of this subreddit](/message/compose/?to=/r/politics) if you have any questions or concerns.*'
 }
+
+logger = logging.getLogger('reddit_cron')
+logger.setLevel(20)
+handler = RotatingFileHandler(CONFIG.get('cron').get('cron_log_path'),
+                              maxBytes=10*1024*1024,
+                              backupCount=5)
+logger.addHandler(handler)
 
 Transformer = namedtuple('Transformer', ['source', 'field', 'func'])
 
@@ -79,12 +90,11 @@ def write_to_s3(bucket_name, bucket_key, data_format='json', base_dir=None, subr
             bucket_key_name = str(filename).split('/')[-2:]
             bucket_key_name = '/'.join([s for s in bucket_key_name])
             bucket.upload_file(str(filename), Key=bucket_key + '/{0}'.format(bucket_key_name))
-            print('Uploading {0}'.format(filename))
+            logger.info('Uploading {0}'.format(filename))
 
-        return 'Success'
+        return 1
 
     today_date_string = datetime.today().strftime('%Y-%m-%d')
-
     subreddit_name = list(subreddit_data.keys())[0]
     for data_type, data_val in subreddit_data[subreddit_name].items():
 
@@ -104,12 +114,18 @@ def write_to_s3(bucket_name, bucket_key, data_format='json', base_dir=None, subr
         s3object = s3.Object(bucket_name, key)
         s3object.put(Body=fake_handle.read())  # Body must be read as a binary str
 
-        print('Uploading {0}'.format(key))
+        logger.info('Uploading {0}'.format(key))
 
-    return 'Success'
+    return 1
 
 
 def main():
+
+    reddit = praw.Reddit(client_id=REDDIT_CONFIG.get('client_id'),
+                         client_secret=REDDIT_CONFIG.get('client_secret'),
+                         refresh_token=REDDIT_CONFIG.get('refresh_token'),
+                         user_agent=REDDIT_CONFIG.get('user_agent'))
+
     all_subreddit_data = dict.fromkeys(SUBREDDITS, None)
 
     # Definition: 200 rising submissions with all comments and subcomments
@@ -123,7 +139,7 @@ def main():
         submission_counter = 1
 
         for submission in subreddit.rising(limit=100):
-            print('Processing subreddit {0} submission {1}'.format(subreddit_name, submission_counter))
+            logger.info('Processing subreddit {0} submission {1}'.format(subreddit_name, submission_counter))
             current = 'Processing subreddit {0} submission {1}'.format(subreddit_name, submission_counter)
 
             # print(submission.permalink)
@@ -200,22 +216,15 @@ def main():
         #     bucket_name=CONFIG.get('s3').get('test_bucket_name'),
         #     bucket_key=CONFIG.get('s3').get('reddit_bucket_key')
         # )
-        response = write_to_s3(
+        write_to_s3(
             bucket_name=CONFIG.get('s3').get('bucket_name'),
             bucket_key=CONFIG.get('s3').get('reddit_bucket_key'),
             subreddit_data={subreddit_name: all_subreddit_data[subreddit_name]}
         )
 
-    return response
+    return 1
 
 if __name__ == '__main__':
 
-    reddit = praw.Reddit(client_id=REDDIT_CONFIG.get('client_id'),
-                     client_secret=REDDIT_CONFIG.get('client_secret'),
-                     refresh_token=REDDIT_CONFIG.get('refresh_token'),
-                     user_agent=REDDIT_CONFIG.get('user_agent'))
-
-    today_date_string = datetime.today().strftime('%Y-%m-%d')
-
     scraper_status = main()
-    print(scraper_status)
+    logger.info(scraper_status)
