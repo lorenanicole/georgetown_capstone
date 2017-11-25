@@ -31,7 +31,7 @@ BOT_WARNINGS = {
 
 logger = logging.getLogger('reddit_cron')
 logger.setLevel(20)
-handler = RotatingFileHandler(CONFIG.get('cron').get('cron_log_path'),
+handler = RotatingFileHandler(CONFIG.get('cron').get('log_path'),
                               maxBytes=10*1024*1024,
                               backupCount=5)
 logger.addHandler(handler)
