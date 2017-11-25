@@ -128,6 +128,10 @@ def main():
 
     all_subreddit_data = dict.fromkeys(SUBREDDITS, None)
 
+    today_date_string = datetime.today().strftime('%Y-%m-%d')
+
+    logger.info('Starting {} reddit scrape for'.format(today_date_string))
+
     # Definition: 200 rising submissions with all comments and subcomments
     for subreddit_name in SUBREDDITS:
         all_subreddit_data[subreddit_name] = {
