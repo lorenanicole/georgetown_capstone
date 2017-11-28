@@ -89,8 +89,8 @@ def write_to_s3(bucket_name, bucket_key, data_format='json', base_dir=None, subr
         for filename in Path(base_dir).glob('*.{0}'.format(data_format)):
             bucket_key_name = str(filename).split('/')[-2:]
             bucket_key_name = '/'.join([s for s in bucket_key_name])
-            bucket.upload_file(str(filename), Key=bucket_key + '/{0}'.format(bucket_key_name))
             logger.info('Uploading {0}'.format(filename))
+            bucket.upload_file(str(filename), Key=bucket_key + '/{0}'.format(bucket_key_name))
 
         return 1
 
@@ -161,7 +161,7 @@ def main():
                     submission.comments.replace_more(limit=0)
                     continue
 
-                if BOT_WARNINGS.get(subreddit_name, '') in comment.body:
+                if BOT_WARNINGS.get(subreddit_name) and BOT_WARNINGS.get(subreddit_name) in comment.body:
                     continue
 
                 comment_queue.extend(comment.replies)
