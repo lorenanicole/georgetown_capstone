@@ -31,7 +31,7 @@ BOT_WARNINGS = {
 
 logger = logging.getLogger('reddit_cron')
 logger.setLevel(20)
-handler = RotatingFileHandler(CONFIG.get('cron').get('log_path'),
+handler = RotatingFileHandler(CONFIG.get('cron').get('reddit_log_path'),
                               maxBytes=10*1024*1024,
                               backupCount=5)
 logger.addHandler(handler)
@@ -144,7 +144,6 @@ def main():
 
         for submission in subreddit.rising(limit=200):
             logger.info('Processing subreddit {0} submission {1}'.format(subreddit_name, submission_counter))
-
             # print(submission.permalink)
             submission_counter += 1
 
