@@ -11,7 +11,7 @@ cffi==1.11.0
 chardet==3.0.4
 colorama==0.3.7
 constantly==15.1.0
-cryptography==2.0.3
+cryptography==3.2
 cssselect==1.0.1
 docutils==0.14
 hyperlink==17.3.1
