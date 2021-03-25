@@ -30,7 +30,7 @@ PyDispatcher==2.0.5
 pyOpenSSL==17.3.0
 python-dateutil==2.6.1
 pytz==2017.2
-PyYAML==3.12
+PyYAML==5.4
 queuelib==1.4.2
 requests==2.18.4
 rsa==3.4.2
@@ -46,5 +46,5 @@ python-crontab==2.2.0
 praw==5.2.0
 prawcore==0.12.0
 psycopg2==2.7.3.1
-PyYAML==3.12
+PyYAML==5.4
 requests==2.18.4
